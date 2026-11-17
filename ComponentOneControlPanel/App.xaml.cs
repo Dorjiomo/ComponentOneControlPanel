@@ -78,10 +78,7 @@ public partial class App : Application
                 .ConfigureServices((context, services) =>
                 {
                     services.AddSingleton<ProductCatalogService>();
-
-                    services.AddSingleton<IPackageInstaller, FakePackageInstaller>();
-
-                    services.AddSingleton<MainModel>();
+                    services.AddSingleton<IPackageInstaller, PackageDownloaderAdapter>();
                 })
                 .UseNavigation(ReactiveViewModelMappings.ViewModelMappings, RegisterRoutes)
             );

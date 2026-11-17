@@ -27,8 +27,11 @@ public sealed class ProductCatalogService
                 PropertyNameCaseInsensitive = true
             });
 
-        if (catalog is null)
+        if (catalog?.Root is null)
         {
+            _logger.LogWarning(
+                "The bundled product catalog was empty or could not be deserialized.");
+
             return [];
         }
 
@@ -36,41 +39,68 @@ public sealed class ProductCatalogService
 
         foreach (var root in catalog.Root)
         {
-            foreach (var product in root.Products)
+            foreach (var catalogProduct in root.Products ?? [])
             {
-                foreach (var edition in product.Editions)
+                foreach (var edition in catalogProduct.Editions ?? [])
                 {
-                    var latestVersion = edition.Versions
-                        .FirstOrDefault();
+                    var latestVersion = edition.Versions?.FirstOrDefault();
 
                     if (latestVersion is null)
                     {
+                        _logger.LogWarning(
+                            "Skipping product {ProductName} because it has no version entry.",
+                            edition.Name);
+
                         continue;
                     }
 
+                    var isDownloadConfigured =
+                        !string.IsNullOrWhiteSpace(edition.DownloadProductId) &&
+                        !string.IsNullOrWhiteSpace(edition.DownloadVersion) &&
+                        !string.IsNullOrWhiteSpace(edition.DownloadLanguage);
+
                     products.Add(new ProductCardInfo(
                         id: edition.Id,
-                        productId: edition.SKU,
+                        productId: edition.Id,
                         name: edition.Name,
                         badge: edition.SKU,
                         badgeColor: GetBadgeColor(edition.SKU),
                         version: latestVersion.Version,
-                        framework: "net8.0",
+                        framework: GetDisplayFramework(edition),
                         category: edition.Category,
-                        installEnabled: edition.Name.Contains(
-                            "MVC",
-                            StringComparison.OrdinalIgnoreCase)));
+                        installEnabled: isDownloadConfigured,
+                        downloadProductId: edition.DownloadProductId,
+                        downloadVersion: edition.DownloadVersion,
+                        downloadFramework: edition.DownloadFramework,
+                        downloadLanguage: edition.DownloadLanguage));
                 }
             }
         }
 
+        _logger.LogInformation(
+            "Loaded {ProductCount} products from bundled products.json.",
+            products.Count);
+
         return products;
+    }
+
+    private static string GetDisplayFramework(CatalogEdition edition)
+    {
+        return string.Equals(
+            edition.DownloadFramework,
+            "60",
+            StringComparison.OrdinalIgnoreCase)
+            ? "net8.0"
+            : string.IsNullOrWhiteSpace(edition.DownloadFramework)
+                ? string.Empty
+                : edition.DownloadFramework;
     }
 
     private static string GetBadgeColor(string sku)
     {
         return sku switch
         {
+            "MVCCore" => "#C2185B",
             "ANMC" => "#C2185B",
             "B" => "#7B1FA2",
             "W" => "#00897B",

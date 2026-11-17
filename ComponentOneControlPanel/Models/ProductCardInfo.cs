@@ -14,7 +14,11 @@ public sealed partial class ProductCardInfo : INotifyPropertyChanged
         string version,
         string framework,
         string category,
-        bool installEnabled)
+        bool installEnabled,
+        string downloadProductId,
+        string downloadVersion,
+        string downloadFramework,
+        string downloadLanguage)
     {
         Id = id;
         ProductId = productId;
@@ -25,10 +29,15 @@ public sealed partial class ProductCardInfo : INotifyPropertyChanged
         Framework = framework;
         Category = category;
         InstallEnabled = installEnabled;
+        DownloadProductId = downloadProductId;
+        DownloadVersion = downloadVersion;
+        DownloadFramework = downloadFramework;
+        DownloadLanguage = downloadLanguage;
     }
 
     public string Id { get; }
 
+    // UI/catalog identifier only. It is not necessarily the PackageDownloaderCore identifier.
     public string ProductId { get; }
 
     public string Name { get; }
@@ -37,13 +46,24 @@ public sealed partial class ProductCardInfo : INotifyPropertyChanged
 
     public string BadgeColor { get; }
 
+    // UI display version.
     public string Version { get; }
 
+    // UI display framework.
     public string Framework { get; }
 
     public string Category { get; }
 
     public bool InstallEnabled { get; }
+
+    // Exact PackageDownloaderCore request values.
+    public string DownloadProductId { get; }
+
+    public string DownloadVersion { get; }
+
+    public string DownloadFramework { get; }
+
+    public string DownloadLanguage { get; }
 
     private bool _isInstalled;
 
@@ -70,6 +90,7 @@ public sealed partial class ProductCardInfo : INotifyPropertyChanged
             _isInstalling = value;
             OnPropertyChanged();
             OnPropertyChanged(nameof(ShowProgress));
+            OnPropertyChanged(nameof(ProgressText));
         }
     }
 
@@ -110,9 +131,7 @@ public sealed partial class ProductCardInfo : INotifyPropertyChanged
         IsInstalled;
 
     public string ProgressText =>
-        IsUninstalling
-            ? "Uninstalling..."
-            : "Installing...";
+        IsUninstalling ? "Uninstalling..." : "Installing...";
 
     public string ProgressPercentageText =>
         $"{InstallProgress:F0}%";

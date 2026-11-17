@@ -19,17 +19,8 @@ public partial record MainModel
 
         SelectedCategory = "All";
         SelectedTab = "Available";
-
         Status = string.Empty;
     }
-
-    public IReadOnlyList<string> Categories =>
-    _products
-        .Select(x => x.Category)
-        .Distinct()
-        .OrderBy(x => x)
-        .Prepend("All")
-        .ToList();
 
     public string SelectedCategory { get; private set; }
 
@@ -42,6 +33,15 @@ public partial record MainModel
     public bool IsBusy { get; private set; }
 
     public string SnackbarMessage { get; private set; } = string.Empty;
+
+    public IReadOnlyList<string> Categories =>
+        _products
+            .Select(x => x.Category)
+            .Where(x => !string.IsNullOrWhiteSpace(x))
+            .Distinct()
+            .OrderBy(x => x)
+            .Prepend("All")
+            .ToList();
 
     public async Task InitializeAsync()
     {
@@ -67,11 +67,8 @@ public partial record MainModel
 
         query = SelectedCategory switch
         {
-            "Desktop" => query.Where(x => x.Category == "Desktop"),
-            "Web" => query.Where(x => x.Category == "Web"),
-            "Mobile" => query.Where(x => x.Category == "Mobile"),
-            "Service Components" => query.Where(x => x.Category == "Service Components"),
-            _ => query
+            "All" => query,
+            _ => query.Where(x => x.Category == SelectedCategory)
         };
 
         return query.ToList();
@@ -80,20 +77,18 @@ public partial record MainModel
     public async Task SelectCategory(string category)
     {
         SelectedCategory = category;
-
         await Task.CompletedTask;
     }
 
     public async Task SelectTab(string tab)
     {
         SelectedTab = tab;
-
         await Task.CompletedTask;
     }
 
     public async Task Install(
-    ProductCardInfo product,
-    CancellationToken cancellationToken)
+        ProductCardInfo product,
+        CancellationToken cancellationToken)
     {
         if (product.IsInstalling)
         {
@@ -109,9 +104,7 @@ public partial record MainModel
                 x =>
                 {
                     product.InstallProgress = x.percent;
-
                     ProgressPercent = x.percent;
-
                     Status = x.status;
                 });
 
@@ -130,20 +123,19 @@ public partial record MainModel
                 ex,
                 "Install failed for {Product}",
                 product.Name);
+
+            throw;
         }
         finally
         {
             product.IsInstalling = false;
-
             product.InstallProgress = 0;
-
             ProgressPercent = 0;
-
             Status = string.Empty;
-
             SnackbarMessage = $"{product.Name} installed";
         }
     }
+
     public async Task Uninstall(ProductCardInfo product)
     {
         product.IsUninstalling = true;
@@ -151,14 +143,11 @@ public partial record MainModel
         for (var i = 0; i <= 100; i += 10)
         {
             product.InstallProgress = i;
-
             await Task.Delay(150);
         }
 
         product.IsInstalled = false;
-
         product.IsUninstalling = false;
-
         product.InstallProgress = 0;
 
         SnackbarMessage = $"{product.Name} uninstalled";

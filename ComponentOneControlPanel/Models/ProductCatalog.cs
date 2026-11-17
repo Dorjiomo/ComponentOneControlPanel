@@ -17,6 +17,10 @@ public sealed partial record CatalogEdition(
     string Category,
     string Description,
     string HelpLink,
+    string DownloadProductId,
+    string DownloadVersion,
+    string DownloadFramework,
+    string DownloadLanguage,
     List<CatalogVersion> Versions);
 
 public sealed partial record CatalogVersion(

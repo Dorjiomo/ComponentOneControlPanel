@@ -6,15 +6,19 @@
         {
           "Editions": [
             {
-              "Name": "ASP.NET MVC Core",
+              "Name": "ASP.NET MVC Core Controls",
               "Id": "mvc-core",
-              "SKU": "ANMC",
+              "SKU": "MVCCore",
               "Category": "Web",
-              "Description": "ASP.NET MVC Core controls",
-              "HelpLink": "https://developer.mescius.com",
+              "Description": "Modern controls for today's web. A set of fast and lightweight ASP.NET Core MVC controls.",
+              "HelpLink": "https://developer.mescius.com/componentone/docs/mvc",
+              "DownloadProductId": "mvc-core",
+              "DownloadVersion": "2026v1.2",
+              "DownloadFramework": "60",
+              "DownloadLanguage": "EN",
               "Versions": [
                 {
-                  "Version": "2026v1",
+                  "Version": "2026v2 (477)",
                   "Directories": []
                 }
               ]
@@ -26,6 +30,10 @@
               "Category": "Web",
               "Description": "Blazor controls",
               "HelpLink": "https://developer.mescius.com",
+              "DownloadProductId": "",
+              "DownloadVersion": "",
+              "DownloadFramework": "",
+              "DownloadLanguage": "",
               "Versions": [
                 {
                   "Version": "2026v1",
@@ -40,6 +48,10 @@
               "Category": "Web",
               "Description": "Web API controls",
               "HelpLink": "https://developer.mescius.com",
+              "DownloadProductId": "",
+              "DownloadVersion": "",
+              "DownloadFramework": "",
+              "DownloadLanguage": "",
               "Versions": [
                 {
                   "Version": "2026v1",
@@ -54,6 +66,10 @@
               "Category": "Web",
               "Description": "WebForms controls",
               "HelpLink": "https://developer.mescius.com",
+              "DownloadProductId": "",
+              "DownloadVersion": "",
+              "DownloadFramework": "",
+              "DownloadLanguage": "",
               "Versions": [
                 {
                   "Version": "2025v2",
@@ -68,6 +84,10 @@
               "Category": "Desktop",
               "Description": "WinForms controls",
               "HelpLink": "https://developer.mescius.com",
+              "DownloadProductId": "",
+              "DownloadVersion": "",
+              "DownloadFramework": "",
+              "DownloadLanguage": "",
               "Versions": [
                 {
                   "Version": "2026v1",
