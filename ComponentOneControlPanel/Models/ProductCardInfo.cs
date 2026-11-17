@@ -1,27 +1,132 @@
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+
 namespace ComponentOneControlPanel.Models;
 
-public sealed partial record ProductCardInfo(
-    string Id,
-    string ProductId,
-    string Name,
-    string Badge,
-    string BadgeColor,
-    string Version,
-    string Framework,
-    string Category,
-    bool InstallEnabled)
+public sealed partial class ProductCardInfo : INotifyPropertyChanged
 {
-    public bool IsInstalled { get; set; }
+    public ProductCardInfo(
+        string id,
+        string productId,
+        string name,
+        string badge,
+        string badgeColor,
+        string version,
+        string framework,
+        string category,
+        bool installEnabled)
+    {
+        Id = id;
+        ProductId = productId;
+        Name = name;
+        Badge = badge;
+        BadgeColor = badgeColor;
+        Version = version;
+        Framework = framework;
+        Category = category;
+        InstallEnabled = installEnabled;
+    }
 
-    public bool IsInstalling { get; set; }
+    public string Id { get; }
 
-    public double InstallProgress { get; set; }
+    public string ProductId { get; }
 
-    public string InstallStatus { get; set; } = string.Empty;
+    public string Name { get; }
+
+    public string Badge { get; }
+
+    public string BadgeColor { get; }
+
+    public string Version { get; }
+
+    public string Framework { get; }
+
+    public string Category { get; }
+
+    public bool InstallEnabled { get; }
+
+    private bool _isInstalled;
+
+    public bool IsInstalled
+    {
+        get => _isInstalled;
+        set
+        {
+            _isInstalled = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(ActionButtonText));
+            OnPropertyChanged(nameof(ModifyEnabled));
+            OnPropertyChanged(nameof(UninstallEnabled));
+        }
+    }
+
+    private bool _isInstalling;
+
+    public bool IsInstalling
+    {
+        get => _isInstalling;
+        set
+        {
+            _isInstalling = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(ShowProgress));
+        }
+    }
+
+    private bool _isUninstalling;
+
+    public bool IsUninstalling
+    {
+        get => _isUninstalling;
+        set
+        {
+            _isUninstalling = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(ShowProgress));
+            OnPropertyChanged(nameof(ProgressText));
+        }
+    }
+
+    private double _installProgress;
+
+    public double InstallProgress
+    {
+        get => _installProgress;
+        set
+        {
+            _installProgress = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(ProgressPercentageText));
+        }
+    }
 
     public string ActionButtonText =>
         IsInstalled ? "Update" : "Install";
 
     public bool ModifyEnabled =>
         IsInstalled;
+
+    public bool UninstallEnabled =>
+        IsInstalled;
+
+    public string ProgressText =>
+        IsUninstalling
+            ? "Uninstalling..."
+            : "Installing...";
+
+    public string ProgressPercentageText =>
+        $"{InstallProgress:F0}%";
+
+    public bool ShowProgress =>
+        IsInstalling || IsUninstalling;
+
+    public event PropertyChangedEventHandler? PropertyChanged;
+
+    private void OnPropertyChanged(
+        [CallerMemberName] string? propertyName = null)
+    {
+        PropertyChanged?.Invoke(
+            this,
+            new PropertyChangedEventArgs(propertyName));
+    }
 }

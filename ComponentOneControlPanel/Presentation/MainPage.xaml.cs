@@ -307,4 +307,32 @@ public sealed partial class MainPage : Page
                         68,
                         68));
     }
+    private async void Uninstall_Click(
+    object sender,
+    RoutedEventArgs e)
+    {
+        if (ViewModel is null)
+        {
+            return;
+        }
+
+        if (sender is not Button button)
+        {
+            return;
+        }
+
+        if (button.DataContext is not ProductCardInfo product)
+        {
+            return;
+        }
+
+        await ViewModel.Model.Uninstall(product);
+
+        await RefreshUiAsync();
+
+        await ShowSnackbarAsync(
+            ViewModel.Model.SnackbarMessage);
+
+        ViewModel.Model.ClearSnackbar();
+    }
 }

@@ -49,15 +49,15 @@ public sealed class ProductCatalogService
                     }
 
                     products.Add(new ProductCardInfo(
-                        Id: edition.Id,
-                        ProductId: edition.SKU,
-                        Name: edition.Name,
-                        Badge: edition.SKU,
-                        BadgeColor: GetBadgeColor(edition.SKU),
-                        Version: latestVersion.Version,
-                        Framework: "net8.0",
-                        Category: GetCategory(edition.Name),
-                        InstallEnabled: edition.Name.Contains(
+                        id: edition.Id,
+                        productId: edition.SKU,
+                        name: edition.Name,
+                        badge: edition.SKU,
+                        badgeColor: GetBadgeColor(edition.SKU),
+                        version: latestVersion.Version,
+                        framework: "net8.0",
+                        category: GetCategory(edition.Name),
+                        installEnabled: edition.Name.Contains(
                             "MVC",
                             StringComparison.OrdinalIgnoreCase)));
                 }

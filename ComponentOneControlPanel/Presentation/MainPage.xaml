@@ -233,9 +233,9 @@
                                                         FontSize="12"/>
 
                                                     <TextBlock
-                                                        Text="{Binding InstallStatus, FallbackValue=Latest version}"
+                                                        Text="Latest version"
                                                         FontWeight="SemiBold"
-                                                        FontSize="13"/>
+                                                        FontSize="13"/>     
                                                 </StackPanel>
 
                                                 <StackPanel
@@ -259,54 +259,83 @@
 
                                             <StackPanel
                                                 Grid.Column="2"
-                                                Spacing="10">
+                                                Spacing="10"
+                                                Width="140">
 
                                                 <Button
                                                     Content="✎  Modify"
                                                     IsEnabled="{Binding ModifyEnabled}"
-                                                    Height="38"/>
+                                                    Height="38"
+                                                    Width="140"/>
+                                                
 
                                                 <Button
                                                     Content="{Binding ActionButtonText}"
                                                     IsEnabled="{Binding InstallEnabled}"
                                                     Height="38"
+                                                    Width="140"
                                                     BorderBrush="#0078D4"
                                                     Foreground="#0078D4"
                                                     Background="White"
                                                     Click="Install_Click"/>
+
+                                                <Button
+                                                    Content="Uninstall"
+                                                    Visibility="{Binding IsInstalled, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                    Height="38"
+                                                    Width="140"
+                                                    Click="Uninstall_Click"/>
                                             </StackPanel>
                                         </Grid>
 
                                         <!-- INLINE PROGRESS -->
 
                                         <Grid
-                                            Margin="0,18,0,0"
-                                            Visibility="{Binding IsInstalling, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                        Margin="0,20,0,0"
+                                        Visibility="{Binding ShowProgress, Converter={StaticResource BooleanToVisibilityConverter}}">       
 
                                             <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="110"/>
+                                                <ColumnDefinition Width="180"/>
                                                 <ColumnDefinition Width="*"/>
                                                 <ColumnDefinition Width="60"/>
+                                                <ColumnDefinition Width="50"/>
                                             </Grid.ColumnDefinitions>
 
                                             <TextBlock
-                                                Text="Installing..."
+                                                Text="{Binding ProgressText}"
                                                 VerticalAlignment="Center"
-                                                FontSize="14"/>
+                                                FontSize="15"
+                                                Foreground="#444444"/>      
 
                                             <ProgressBar
                                                 Grid.Column="1"
                                                 Height="8"
-                                                Margin="16,0"
+                                                Margin="18,0"
                                                 Minimum="0"
                                                 Maximum="100"
-                                                Value="{Binding InstallProgress}"/>
+                                                Value="{Binding InstallProgress}"
+                                                VerticalAlignment="Center"
+                                                Foreground="#0A6ED1"
+                                                Background="#E6E6E6"/>
 
                                             <TextBlock
                                                 Grid.Column="2"
-                                                Text="{Binding InstallProgress}"
+                                                Text="{Binding ProgressPercentageText}"
                                                 VerticalAlignment="Center"
-                                                HorizontalAlignment="Right"/>
+                                                HorizontalAlignment="Right"
+                                                FontSize="15"
+                                                Foreground="#555555"/>
+
+                                            <Button
+                                                Grid.Column="3"
+                                                Content="✕"
+                                                Width="34"
+                                                Height="34"
+                                                Margin="12,0,0,0"
+                                                CornerRadius="17"
+                                                Background="Transparent"
+                                                BorderBrush="#D0D0D0"
+                                                Foreground="#666666"/>
                                         </Grid>
                                     </StackPanel>
                                 </Border>

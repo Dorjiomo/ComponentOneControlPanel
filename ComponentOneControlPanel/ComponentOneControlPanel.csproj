@@ -43,7 +43,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Update="Assets\Icons\c1-logo..png">
+    <Content Update="Assets\Icons\c1-logo.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

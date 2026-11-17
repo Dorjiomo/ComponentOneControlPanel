@@ -84,21 +84,16 @@ public partial record MainModel
     }
 
     public async Task Install(
-        ProductCardInfo product,
-        CancellationToken cancellationToken)
+    ProductCardInfo product,
+    CancellationToken cancellationToken)
     {
         if (product.IsInstalling)
         {
             return;
         }
 
-        IsBusy = true;
-
         product.IsInstalling = true;
         product.InstallProgress = 0;
-        product.InstallStatus = "Installing...";
-
-        Status = $"Installing {product.Name}...";
 
         try
         {
@@ -106,9 +101,9 @@ public partial record MainModel
                 x =>
                 {
                     product.InstallProgress = x.percent;
-                    product.InstallStatus = x.status;
 
                     ProgressPercent = x.percent;
+
                     Status = x.status;
                 });
 
@@ -118,23 +113,9 @@ public partial record MainModel
                 cancellationToken);
 
             product.IsInstalled = true;
-            product.IsInstalling = false;
-            product.InstallProgress = 100;
-            product.InstallStatus = "Installed";
-
-            Status = $"{product.Name} installed";
-
-            SnackbarMessage = $"{product.Name} installed";
-
-            _logger.LogInformation(
-                "{Product} installed",
-                product.Name);
         }
         catch (Exception ex)
         {
-            product.IsInstalling = false;
-            product.InstallStatus = "Failed";
-
             Status = $"Install failed: {ex.Message}";
 
             _logger.LogError(
@@ -144,8 +125,35 @@ public partial record MainModel
         }
         finally
         {
-            IsBusy = false;
+            product.IsInstalling = false;
+
+            product.InstallProgress = 0;
+
+            ProgressPercent = 0;
+
+            Status = string.Empty;
+
+            SnackbarMessage = $"{product.Name} installed";
         }
+    }
+    public async Task Uninstall(ProductCardInfo product)
+    {
+        product.IsUninstalling = true;
+
+        for (var i = 0; i <= 100; i += 10)
+        {
+            product.InstallProgress = i;
+
+            await Task.Delay(150);
+        }
+
+        product.IsInstalled = false;
+
+        product.IsUninstalling = false;
+
+        product.InstallProgress = 0;
+
+        SnackbarMessage = $"{product.Name} uninstalled";
     }
 
     public void ClearSnackbar()
