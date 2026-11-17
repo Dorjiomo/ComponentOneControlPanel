@@ -1,0 +1,78 @@
+{
+  "Root": [
+    {
+      "HelpLink": "https://developer.mescius.com",
+      "Products": [
+        {
+          "Editions": [
+            {
+              "Name": "ASP.NET MVC Core",
+              "Id": "mvc-core",
+              "SKU": "ANMC",
+              "Description": "ASP.NET MVC Core controls",
+              "HelpLink": "https://developer.mescius.com",
+              "Versions": [
+                {
+                  "Version": "2026v1",
+                  "Directories": []
+                }
+              ]
+            },
+            {
+              "Name": "Blazor",
+              "Id": "blazor",
+              "SKU": "B",
+              "Description": "Blazor controls",
+              "HelpLink": "https://developer.mescius.com",
+              "Versions": [
+                {
+                  "Version": "2026v1",
+                  "Directories": []
+                }
+              ]
+            },
+            {
+              "Name": "WebAPI",
+              "Id": "webapi",
+              "SKU": "W",
+              "Description": "Web API controls",
+              "HelpLink": "https://developer.mescius.com",
+              "Versions": [
+                {
+                  "Version": "2026v1",
+                  "Directories": []
+                }
+              ]
+            },
+            {
+              "Name": "WebForms",
+              "Id": "webforms",
+              "SKU": "W",
+              "Description": "WebForms controls",
+              "HelpLink": "https://developer.mescius.com",
+              "Versions": [
+                {
+                  "Version": "2025v2",
+                  "Directories": []
+                }
+              ]
+            },
+            {
+              "Name": "WinForms",
+              "Id": "winforms",
+              "SKU": "WF",
+              "Description": "WinForms controls",
+              "HelpLink": "https://developer.mescius.com",
+              "Versions": [
+                {
+                  "Version": "2026v1",
+                  "Directories": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
