@@ -1,5 +1,6 @@
 using Microsoft.UI;
 using Microsoft.UI.Xaml.Media;
+using Uno.Extensions.Reactive.Bindings;
 using Windows.UI;
 
 namespace ComponentOneControlPanel.Presentation;
@@ -32,15 +33,20 @@ public sealed partial class MainPage : Page
 
     private async Task RefreshUiAsync()
     {
-        if (ViewModel is null)
+        var model = ViewModel?.Model;
+
+        if (model is null)
         {
             return;
         }
 
         var products =
-            ViewModel.Model.GetVisibleProducts();
+            model.GetVisibleProducts();
 
         ProductsRepeater.ItemsSource = products;
+
+        CategoryRepeater.ItemsSource =
+            model.Categories;
 
         var isEmpty = products.Count == 0;
 
@@ -52,24 +58,129 @@ public sealed partial class MainPage : Page
         if (isEmpty)
         {
             EmptyTextBlock.Text =
-                ViewModel.Model.SelectedTab == "Installed"
+                model.SelectedTab == "Installed"
                     ? "No installed products."
                     : "No available products match this filter.";
         }
 
         StatusTextBlock.Text =
-            ViewModel.Model.Status;
+            model.Status;
 
         InstallProgressBar.Value =
-            ViewModel.Model.ProgressPercent;
-
-        UpdateFilterButtonStates();
+            model.ProgressPercent;
 
         UpdateTabStates();
 
         await Task.CompletedTask;
     }
 
+    private async void CategoryButton_Click(
+    object sender,
+    RoutedEventArgs e)
+    {
+        var model = ViewModel?.Model;
+
+        if (model is null)
+        {
+            return;
+        }
+
+        if (sender is not Button button)
+        {
+            return;
+        }
+
+        if (button.DataContext is not string category)
+        {
+            return;
+        }
+
+        await model.SelectCategory(category);
+
+        await RefreshUiAsync();
+    }
+
+    private void CategoryButton_Loaded(
+    object sender,
+    RoutedEventArgs e)
+    {
+        ApplyCategoryButtonStyle(sender as Button);
+    }
+
+    private void ApplyCategoryButtonStyle(Button? button)
+    {
+        if (button is null)
+        {
+            return;
+        }
+
+        var model = ViewModel?.Model;
+
+        if (model is null)
+        {
+            return;
+        }
+
+        var category =
+            button.DataContext?.ToString();
+
+        var isSelected =
+            category == model.SelectedCategory;
+
+        button.Background =
+            new SolidColorBrush(
+                isSelected
+                    ? Color.FromArgb(255, 0, 120, 212)
+                    : Colors.White);
+
+        button.Foreground =
+            new SolidColorBrush(
+                isSelected
+                    ? Colors.White
+                    : Color.FromArgb(255, 64, 64, 64));
+
+        button.BorderBrush =
+            new SolidColorBrush(
+                isSelected
+                    ? Color.FromArgb(255, 0, 120, 212)
+                    : Color.FromArgb(255, 208, 208, 208));
+    }
+
+    private void CategoryButton_PointerEntered(
+        object sender,
+        Microsoft.UI.Xaml.Input.PointerRoutedEventArgs e)
+    {
+        if (sender is not Button button)
+        {
+            return;
+        }
+
+        var model = ViewModel?.Model;
+
+        if (model is null)
+        {
+            return;
+        }
+
+        var category =
+            button.DataContext?.ToString();
+
+        if (category == model.SelectedCategory)
+        {
+            return;
+        }
+
+        button.Background =
+            new SolidColorBrush(
+                Color.FromArgb(255, 245, 245, 245));
+    }
+
+    private void CategoryButton_PointerExited(
+        object sender,
+        Microsoft.UI.Xaml.Input.PointerRoutedEventArgs e)
+    {
+        ApplyCategoryButtonStyle(sender as Button);
+    }
     private async void Install_Click(
         object sender,
         RoutedEventArgs e)
@@ -145,42 +256,6 @@ public sealed partial class MainPage : Page
 
         await RefreshUiAsync();
     }
-
-    private async void AllFilter_Click(
-        object sender,
-        RoutedEventArgs e)
-    {
-        await ChangeCategory("All");
-    }
-
-    private async void DesktopFilter_Click(
-        object sender,
-        RoutedEventArgs e)
-    {
-        await ChangeCategory("Desktop");
-    }
-
-    private async void WebFilter_Click(
-        object sender,
-        RoutedEventArgs e)
-    {
-        await ChangeCategory("Web");
-    }
-
-    private async void MobileFilter_Click(
-        object sender,
-        RoutedEventArgs e)
-    {
-        await ChangeCategory("Mobile");
-    }
-
-    private async void ServiceFilter_Click(
-        object sender,
-        RoutedEventArgs e)
-    {
-        await ChangeCategory("Service Components");
-    }
-
     private async Task ChangeCategory(
         string category)
     {
@@ -214,36 +289,7 @@ public sealed partial class MainPage : Page
             selected == "Available");
     }
 
-    private void UpdateFilterButtonStates()
-    {
-        if (ViewModel is null)
-        {
-            return;
-        }
 
-        var selected =
-            ViewModel.Model.SelectedCategory;
-
-        SetFilterButtonStyle(
-            AllButton,
-            selected == "All");
-
-        SetFilterButtonStyle(
-            DesktopButton,
-            selected == "Desktop");
-
-        SetFilterButtonStyle(
-            WebButton,
-            selected == "Web");
-
-        SetFilterButtonStyle(
-            MobileButton,
-            selected == "Mobile");
-
-        SetFilterButtonStyle(
-            ServiceButton,
-            selected == "Service Components");
-    }
 
     private static void SetTopTabStyle(
         Button button,

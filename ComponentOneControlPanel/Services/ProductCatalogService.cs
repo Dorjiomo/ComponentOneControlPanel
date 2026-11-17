@@ -56,7 +56,7 @@ public sealed class ProductCatalogService
                         badgeColor: GetBadgeColor(edition.SKU),
                         version: latestVersion.Version,
                         framework: "net8.0",
-                        category: GetCategory(edition.Name),
+                        category: edition.Category,
                         installEnabled: edition.Name.Contains(
                             "MVC",
                             StringComparison.OrdinalIgnoreCase)));
@@ -65,16 +65,6 @@ public sealed class ProductCatalogService
         }
 
         return products;
-    }
-
-    private static string GetCategory(string name)
-    {
-        if (name.Contains("WinForms", StringComparison.OrdinalIgnoreCase))
-        {
-            return "Desktop";
-        }
-
-        return "Web";
     }
 
     private static string GetBadgeColor(string sku)

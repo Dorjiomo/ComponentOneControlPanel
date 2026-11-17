@@ -9,6 +9,7 @@
               "Name": "ASP.NET MVC Core",
               "Id": "mvc-core",
               "SKU": "ANMC",
+              "Category": "Web",
               "Description": "ASP.NET MVC Core controls",
               "HelpLink": "https://developer.mescius.com",
               "Versions": [
@@ -22,6 +23,7 @@
               "Name": "Blazor",
               "Id": "blazor",
               "SKU": "B",
+              "Category": "Web",
               "Description": "Blazor controls",
               "HelpLink": "https://developer.mescius.com",
               "Versions": [
@@ -35,6 +37,7 @@
               "Name": "WebAPI",
               "Id": "webapi",
               "SKU": "W",
+              "Category": "Web",
               "Description": "Web API controls",
               "HelpLink": "https://developer.mescius.com",
               "Versions": [
@@ -48,6 +51,7 @@
               "Name": "WebForms",
               "Id": "webforms",
               "SKU": "W",
+              "Category": "Web",
               "Description": "WebForms controls",
               "HelpLink": "https://developer.mescius.com",
               "Versions": [
@@ -61,6 +65,7 @@
               "Name": "WinForms",
               "Id": "winforms",
               "SKU": "WF",
+              "Category": "Desktop",
               "Description": "WinForms controls",
               "HelpLink": "https://developer.mescius.com",
               "Versions": [

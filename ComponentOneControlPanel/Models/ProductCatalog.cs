@@ -14,6 +14,7 @@ public sealed partial record CatalogEdition(
     string Name,
     string Id,
     string SKU,
+    string Category,
     string Description,
     string HelpLink,
     List<CatalogVersion> Versions);

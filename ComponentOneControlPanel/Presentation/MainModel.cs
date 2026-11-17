@@ -23,6 +23,14 @@ public partial record MainModel
         Status = string.Empty;
     }
 
+    public IReadOnlyList<string> Categories =>
+    _products
+        .Select(x => x.Category)
+        .Distinct()
+        .OrderBy(x => x)
+        .Prepend("All")
+        .ToList();
+
     public string SelectedCategory { get; private set; }
 
     public string SelectedTab { get; private set; }
